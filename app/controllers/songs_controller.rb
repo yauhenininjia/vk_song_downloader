@@ -3,28 +3,28 @@ require 'open-uri'
 class SongsController < ApplicationController
   protect_from_forgery with: :exception
   before_action :authenticate_user!
-  #after_action only: :download do
-  #  delete_songs
-  #end
 
   def index
     @vk = VkontakteApi::Client.new current_user.token
     @songs = @vk.audio.get
-    #binding.pry
   end
 
   def download
-    #binding.pry
-    uri = URI params[:url]
-    filename = "#{params[:filename]}.mp3"
-    file = File.new filename, 'wb'
-    file.write Net::HTTP.get uri
-    send_file file
-    puts 'data sent'
-  end
-
-  def delete_songs
-    puts 'delete songs'
-    #File.delete "#{params[:filename]}.mp3"
+    songs = params[:songs]
+    songs.each do |song|
+      song = JSON.parse song
+      uri = URI song['url']
+      filename = "#{song['filename']}.mp3"
+      file = nil
+      if File.exist? filename
+        file = File.open filename
+      else
+        file = File.new filename, 'wb'
+        file.write Net::HTTP.get uri
+      end
+      send_file file, disposition: 'attachment'
+    end
+    puts 'end'      
+      
   end
 end

@@ -4,19 +4,28 @@
 <br><br><hr><br>
 
 <table class='table'>
-	<% @songs[0..1].each do |song| %>
-		<tr>
-			<td>
-				<audio controls>
-					<source src=<%= song.url %> type="audio/mp3" preload=none>
-				</audio>
-			</td>
-			<td>
-				<%= "#{song.artist} - #{song.title}" %>
-			</td>
-			<td>
-				<%= link_to "#{song.artist} - #{song.title}", download_path(url: song.url, filename: "#{song.artist} - #{song.title}")%>
-			</td>
-		</tr>
+	<%= form_tag download_path, method: :post do %>
+		<%= submit_tag 'Download' %>
+		<% @songs[0..20].each do |song| %>
+			<tr>
+				<td>
+					<%= check_box_tag 'songs[]', {url: song.url, filename: "#{song.artist} - #{song.title}"}.to_json, false %>
+				</td>
+				<td>
+					<audio controls>
+						<source src=<%= song.url %> type="audio/mp3" preload=none>
+					</audio>
+				</td>
+				<td>
+					<%= link_to  download_path(songs: [{url: song.url, filename: "#{song.artist} - #{song.title}"}.to_json]) do %>
+						<span class='glyphicon glyphicon-download'></span>
+					<% end %>
+				</td>
+				<td>
+					<%= "#{song.artist} - #{song.title}" %>
+					<%= link_to 'Download', song.url, download: "#{song.artist} - #{song.title}" %>
+				</td>
+			</tr>
+		<% end %>
 	<% end %>
 </table>
