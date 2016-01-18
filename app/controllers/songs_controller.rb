@@ -4,6 +4,5 @@ class SongsController < ApplicationController
 
   def index
     @vk = VkontakteApi::Client.new current_user.token
-    binding.pry
   end
 end
