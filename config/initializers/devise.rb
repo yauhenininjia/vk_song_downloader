@@ -263,5 +263,5 @@ Devise.setup do |config|
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 
-  config.omniauth :vkontakte, "5231600", "DVI2fW1V9vpq45hmuN1L"
+  config.omniauth :vkontakte, "5231684", "Dq597gfPdBY0p0YZOlK6"
 end
