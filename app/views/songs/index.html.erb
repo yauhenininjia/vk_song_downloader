@@ -12,9 +12,10 @@
 				</audio>
 			</td>
 			<td>
-				<p><%= "#{song.artist} - #{song.title}" %>
-					
-				</p>
+				<%= "#{song.artist} - #{song.title}" %>
+			</td>
+			<td>
+				<%= link_to "#{song.artist} - #{song.title}", download_path(url: song.url, filename: "#{song.artist} - #{song.title}")%>
 			</td>
 		</tr>
 	<% end %>
