@@ -1,3 +1,21 @@
 <p>Current user <%= "#{current_user.try :provider} #{current_user.try :uid}" %></p>
 <p>Songs index</p>
 <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
+<br><br><hr><br>
+
+<table class='table'>
+	<% @songs[0..1].each do |song| %>
+		<tr>
+			<td>
+				<audio controls>
+					<source src=<%= song.url %> type="audio/mp3" preload=none>
+				</audio>
+			</td>
+			<td>
+				<p><%= "#{song.artist} - #{song.title}" %>
+					
+				</p>
+			</td>
+		</tr>
+	<% end %>
+</table>
