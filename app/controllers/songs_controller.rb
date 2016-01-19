@@ -23,7 +23,8 @@ class SongsController < ApplicationController
     songs = params[:songs]
     @files = []
     songs.map { |song| JSON.parse song }.each do |song|
-      @files << {mp3_filename: mp3_filename(song['filename']), url: song['url']}
+      @files << {mp3_filename: mp3_filename("#{song['artist']} - #{song['title']}"),
+        url: song['url'], artist: song['artist'], title: song['title']}
     end
     create_zip(@zipfile_path, @files)
     
@@ -60,10 +61,19 @@ class SongsController < ApplicationController
         name = file[:mp3_filename]
         uri = URI(file[:url])
         download_song_locally(uri, song_path(name)) unless File.exist? song_path(name)
+        set_song_info(song_path(name), file[:artist], file[:title])
+
         zipfile.add(name, song_path(name))
       end
     end
     logger.info "Finish creating zip in #{zipfile_path}"
+  end
+
+  def set_song_info(song_path, artist, title)
+      Mp3Info.open song_path, encoding: 'utf-8' do |mp3|
+        mp3.tag.artist = artist
+        mp3.tag.title = title
+      end
   end
 
   def song_path(name)
