@@ -12,25 +12,20 @@ class SongsController < ApplicationController
   def download
     uri = URI params[:url]
     filename = "app/assets/audio/#{params[:filename]}.mp3"
-    #songs = params[:songs]
-    #songs.map { |song| JSON.parse song }.each do |song|
-      #uri = URI song["url"]
-      #filename = "app/assets/audio/#{song['filename']}.mp3"
-      file = song_for_download(uri, filename)
-      send_file file.path, disposition: 'attachment'
-    #end
+    path = song_path_for_download(uri, filename)
+    send_file path, disposition: 'attachment'
   end
 
   private
 
-  def song_for_download(uri, filename)
-    file = nil
+  def song_path_for_download(uri, filename)
     if File.exist? filename
-      file = File.open filename
+      filename
     else
       file = File.new filename, 'wb'
       file.write Net::HTTP.get uri
+      file.close
+      file.path
     end
-    file
   end
 end
