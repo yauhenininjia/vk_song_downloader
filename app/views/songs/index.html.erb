@@ -1,5 +1,5 @@
 <p>Current user <%= "#{current_user.try :provider} #{current_user.try :uid}" %></p>
-<%= image_tag current_user.photo_url %>
+<%= image_tag current_user.try(:photo_url) %>
 <p>Songs index</p>
 <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
 <br><br><hr><br>
