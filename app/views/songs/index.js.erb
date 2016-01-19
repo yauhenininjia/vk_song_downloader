@@ -1,0 +1,13 @@
+<% (0..@songs.count).each do |i| %>
+  var checkbox_string = '<%= check_box_tag "songs[]", {url: @songs.at(i).try(:url), filename: "#{@songs.at(i).try(:artist)} - #{@songs.at(i).try(:title)}", artist: @songs.at(i).try(:artist), title: @songs.at(i).try(:title)}.to_json, false %>';
+  $($('#content').children()[<%= i %>]).children('.check_box').html(checkbox_string);
+
+  var player_string = '<audio controls><source src= <%= @songs.at(i).try(:url) %> type="audio/mp3" preload=none></audio>';
+  $($('#content').children()[<%= i %>]).children('.player').html(player_string);
+
+  var info_string = '<%= @songs.at(i).try :artist %>';
+  $($('#content').children()[<%= i %>]).children('.info').html(info_string);
+<% end %>
+
+$('#prev').html('<%= link_to "<<", root_path(page: @page - 1), remote: true, id: "prev" %>');
+$('#next').html('<%= link_to ">>", root_path(page: @page + 1), remote: true, id: "next" %>');

@@ -12,9 +12,27 @@ class SongsController < ApplicationController
     logger.info "Finish deleting zip #{@zipfile_path}"
   end
 
+  def per_page
+    5
+  end
+
   def index
     vk = VkontakteApi::Client.new current_user.token
     @songs = vk.audio.get
+
+    if params[:page]
+      @page = Integer params[:page]
+    else
+      @page = 0
+    end
+=begin
+    @songs = vk.audio.get[@page * per_page...@page * per_page + per_page]
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+=end
   end
 
   def download_zip

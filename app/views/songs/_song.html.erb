@@ -1,8 +1,8 @@
 <div class="row">
-	<div class='col-md-1'>
+	<div class='col-md-1 check_box'>
 		<%= check_box_tag 'songs[]', {url: song.url, filename: "#{song.artist} - #{song.title}", artist: song.artist, title: song.title}.to_json, false %>
 	</div>
-	<div class='col-md-4'>
+	<div class='col-md-4 player'>
 		<audio controls>
 			<source src=<%= song.url %> type="audio/mp3" preload=none>
 		</audio>
@@ -12,7 +12,7 @@
 				<span class='glyphicon glyphicon-download'></span>
 		<% end %>
 	</div>
-	<div class='col-md-4'>
+	<div class='col-md-4 info'>
 		<%= "#{song.artist} - #{song.title}" %>
 	</div>
 </div>

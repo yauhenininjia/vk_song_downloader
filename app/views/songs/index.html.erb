@@ -5,15 +5,17 @@
 <br><br><hr><br>
 
 
+<%= link_to '<<', root_path(page: @page - 1), remote: true, id: 'prev' %>
+<%= link_to '>>', root_path(page: @page + 1), remote: true, id: 'next' %>
+
 <input type='hidden' id='current_page' />  
 <input type='hidden' id='show_per_page' /> 
 <div id='page_navigation'></div> 
 	<%= form_tag download_zip_path, method: :post do %>
 		<%= submit_tag 'Download', class: 'btn btn-success' %> 
 		<div id='content'>
-			<% @songs[0...10].each do |song| %>
+			<% @songs.each do |song| %>
 				<%= render partial: 'song', locals: {song: song} %>
-				<br>
 			<% end %>
 		</div>
 	<% end %>
