@@ -4,12 +4,12 @@
 <br><br><hr><br>
 
 <table class='table'>
-	<%= form_tag download_path, method: :get do %>
+	<%= form_tag download_zip_path, method: :post do %>
 		<%= submit_tag 'Download' %>
 		<% @songs[0..10].each do |song| %>
 			<tr>
 				<td>
-					<%#= check_box_tag 'songs[]', {url: song.url, filename: "#{song.artist} - #{song.title}"}.to_json, false %>
+					<%= check_box_tag 'songs[]', {url: song.url, filename: "#{song.artist} - #{song.title}", artist: song.artist, title: song.title}.to_json, false %>
 				</td>
 				<td>
 					<audio controls>
@@ -17,7 +17,7 @@
 					</audio>
 				</td>
 				<td>
-					<%= link_to  download_path(url: song.url, filename: "#{song.artist} - #{song.title}") do %>
+					<%= link_to  download_path(url: song.url, filename: "#{song.artist} - #{song.title}", artist: song.artist, title: song.title) do %>
 						<span class='glyphicon glyphicon-download'></span>
 					<% end %>
 				</td>
