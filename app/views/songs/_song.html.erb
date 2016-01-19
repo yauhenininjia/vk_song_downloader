@@ -1,0 +1,18 @@
+<div class="row">
+	<div class='col-md-1'>
+		<%= check_box_tag 'songs[]', {url: song.url, filename: "#{song.artist} - #{song.title}", artist: song.artist, title: song.title}.to_json, false %>
+	</div>
+	<div class='col-md-4'>
+		<audio controls>
+			<source src=<%= song.url %> type="audio/mp3" preload=none>
+		</audio>
+	</div>
+	<div class='col-md-1'>
+		<%= link_to  download_path(url: song.url, filename: "#{song.artist} - #{song.title}", artist: song.artist, title: song.title) do %>
+				<span class='glyphicon glyphicon-download'></span>
+		<% end %>
+	</div>
+	<div class='col-md-4'>
+		<%= "#{song.artist} - #{song.title}" %>
+	</div>
+</div>

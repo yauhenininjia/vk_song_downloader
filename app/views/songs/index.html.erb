@@ -1,31 +1,19 @@
 <p>Current user <%= "#{current_user.try :provider} #{current_user.try :uid}" %></p>
+<%= image_tag current_user.photo_url %>
 <p>Songs index</p>
 <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
 <br><br><hr><br>
 
-<table class='table'>
+
+<input type='hidden' id='current_page' />  
+<input type='hidden' id='show_per_page' /> 
+<div id='page_navigation'></div> 
 	<%= form_tag download_zip_path, method: :post do %>
-		<%= submit_tag 'Download' %>
-		<% @songs[0..10].each do |song| %>
-			<tr>
-				<td>
-					<%= check_box_tag 'songs[]', {url: song.url, filename: "#{song.artist} - #{song.title}", artist: song.artist, title: song.title}.to_json, false %>
-				</td>
-				<td>
-					<audio controls>
-						<source src=<%= song.url %> type="audio/mp3" preload=none>
-					</audio>
-				</td>
-				<td>
-					<%= link_to  download_path(url: song.url, filename: "#{song.artist} - #{song.title}", artist: song.artist, title: song.title) do %>
-						<span class='glyphicon glyphicon-download'></span>
-					<% end %>
-				</td>
-				<td>
-					<%= "#{song.artist} - #{song.title}" %>
-					<%= link_to 'Download', song.url, download: "#{song.artist} - #{song.title}.mp3" %>
-				</td>
-			</tr>
-		<% end %>
+		<%= submit_tag 'Download', class: 'btn btn-success' %> 
+		<div id='content'>
+			<% @songs[0...10].each do |song| %>
+				<%= render partial: 'song', locals: {song: song} %>
+				<br>
+			<% end %>
+		</div>
 	<% end %>
-</table>

@@ -37,8 +37,12 @@ class SongsController < ApplicationController
     uri = URI params[:url]
     filename = mp3_filename(params[:filename])
     path = song_path_for_send(uri, filename)
+    set_song_info path, params[:artist], params[:title]
     
-    send_file path
+    File.open(path, 'r') do |f|
+      send_data f.read, filename: filename
+    end
+    File.delete path
   end
 
   private
