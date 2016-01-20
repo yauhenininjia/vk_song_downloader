@@ -57,14 +57,6 @@ class SongsController < ApplicationController
   def download
     uri = URI params[:url]
     filename = mp3_filename(params[:filename])
-    #path = song_path_for_send(uri, filename)
-    #set_song_info path, params[:artist], params[:title]
-    
-    #File.open(path, 'r') do |f|
-      #send_data f.read, filename: filename
-    #end
-    #File.delete path
-
     send_data open(params[:url]).read, filename: filename
   end
 
