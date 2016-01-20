@@ -5,4 +5,11 @@ var html = '';
 
 $('div#content').html(html);
 
+//Current page is not displayed correct (maybe for a ajax pagination)
+//Do it correct
+var prev_page = $('em').text();
+$('em').replaceWith("<a data-remote=true href='?page=" + prev_page + "'>" + prev_page + "</a>");
+var current_page = '<%= params[:page] %>';
+$('a:contains(' + current_page +')').replaceWith('<em>' + current_page + '</em>');
+
 window.history.pushState(null, null, '/?page=<%= params[:page]%>');
