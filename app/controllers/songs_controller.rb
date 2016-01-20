@@ -1,5 +1,6 @@
 require 'open-uri'
 require 'zip'
+require 'dropbox_sdk'
 
 class SongsController < ApplicationController
   protect_from_forgery with: :exception
@@ -18,7 +19,9 @@ class SongsController < ApplicationController
 
   def index
     vk = VkontakteApi::Client.new current_user.token
-    @songs = vk.audio.get
+    @songs = vk.audio.get[0...5]
+
+    client = DropboxClient.new 'XMvuom9l0IAAAAAAAAAADscnpCK0BtjpulmwgmJHun7asGHSSoVDL12dBzwSQ3e5'
 
     if params[:page]
       @page = Integer params[:page]
@@ -54,13 +57,15 @@ class SongsController < ApplicationController
   def download
     uri = URI params[:url]
     filename = mp3_filename(params[:filename])
-    path = song_path_for_send(uri, filename)
-    set_song_info path, params[:artist], params[:title]
+    #path = song_path_for_send(uri, filename)
+    #set_song_info path, params[:artist], params[:title]
     
-    File.open(path, 'r') do |f|
-      send_data f.read, filename: filename
-    end
-    File.delete path
+    #File.open(path, 'r') do |f|
+      #send_data f.read, filename: filename
+    #end
+    #File.delete path
+
+    send_data open(params[:url]).read, filename: filename
   end
 
   private

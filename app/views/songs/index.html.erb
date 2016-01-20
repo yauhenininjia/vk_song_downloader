@@ -1,5 +1,5 @@
 <p>Current user <%= "#{current_user.try :provider} #{current_user.try :uid}" %></p>
-<%= image_tag current_user.try(:photo_url) %>
+<%= image_tag current_user.try :photo_url %>
 <p>Songs index</p>
 <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
 <br><br><hr><br>
@@ -7,6 +7,8 @@
 
 <%= link_to '<<', root_path(page: @page - 1), remote: true, id: 'prev' %>
 <%= link_to '>>', root_path(page: @page + 1), remote: true, id: 'next' %>
+
+<%= link_to 'Download motherfucker', 'https://www.gravatar.com/avatar/f5b260fd26d47ecd5443e6ad026b9896?s=32&d=identicon&r=PG', download: 'fuck.mp3' %>
 
 <input type='hidden' id='current_page' />  
 <input type='hidden' id='show_per_page' /> 
