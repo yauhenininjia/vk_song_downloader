@@ -7,7 +7,6 @@ class SongsController < ApplicationController
   before_action :authenticate_user!
 
   after_action only: :download_zip do
-    delete_songs(@files)
     logger.info "Started deleting zip #{@zipfile_path}"
     File.delete(@zipfile_path)
     logger.info "Finish deleting zip #{@zipfile_path}"
@@ -63,16 +62,6 @@ class SongsController < ApplicationController
   end
 
   private
-
-  def delete_songs(files)
-    logger.info "Started deleting songs"
-    files.each do |file|
-      path = song_path(file[:mp3_filename])
-      File.delete path if File.exist? path
-      logger.info "Delete song #{path}"
-    end
-    logger.info "Finish deleting songs"
-  end
 
   def create_zip(zipfile_path, files)
     logger.info "Creating zip in #{zipfile_path}"
