@@ -1,19 +1,16 @@
-<div class='row'>
-	<div class='col-md-3'>Current user <%= "#{current_user.try :provider} #{current_user.try :uid}" %></div>
-	<div clas='col-md-2'><%= link_to 'Sign out', destroy_user_session_path, method: :delete %></div>
-</div>
+<span class='glyphicon glyphicon-user'><%= "#{current_user.first_name} #{current_user.last_name}" %></span>
+<br>
 <%= image_tag current_user.try :photo_url %>
+<br>
+<%= image_tag 'exit.png' %><%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
 <hr>
 
-<input type='hidden' id='current_page' />  
-<input type='hidden' id='show_per_page' /> 
-<div id='page_navigation'></div> 
-	<%= form_tag download_zip_path, method: :post do %>
-		<%= submit_tag 'Download', class: 'btn btn-success' %> 
-		<div id='content'>
-			<% @songs.each do |song| %>
-				<%= render partial: 'song', locals: {song: song} %>
-			<% end %>
-			<%= will_paginate @songs %>
-		</div>
-	<% end %>
+<%= form_tag download_zip_path, method: :post do %>
+	<%= submit_tag 'Download', class: 'btn btn-success' %> 
+	<div id='content'>
+		<% @songs.each do |song| %>
+			<%= render partial: 'song', locals: {song: song} %>
+		<% end %>
+		<%= will_paginate @songs %>
+	</div>
+<% end %>

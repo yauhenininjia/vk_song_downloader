@@ -7,7 +7,7 @@ class SongsController < ApplicationController
   before_action :authenticate_user!
 
   after_action only: :download_zip do
-    logger.info "Started deleting zip #{@zipfile_path}"
+    logger.info "Start deleting zip #{@zipfile_path}"
     File.delete(@zipfile_path)
     logger.info "Finish deleting zip #{@zipfile_path}"
   end
@@ -30,29 +30,32 @@ class SongsController < ApplicationController
     end
     create_zip(@zipfile_path, @files)
     
-    File.open(@zipfile_path, 'r') do |f|
-      send_data f.read, filename: 'vk_audio.zip'
-    end
+    logger.info "Start sending #{@zipfile_path} to #{current_user.first_name} #{current_user.last_name}"
+    File.open(@zipfile_path, 'r') { |f| send_data f.read, filename: 'vk_audio.zip' }
+    logger.info "Finish sending #{@zipfile_path} to #{current_user.first_name} #{current_user.last_name}"
   end
 
   def download
     uri = URI params[:url]
     filename = mp3_filename(params[:filename])
-    logger.info "Started sending #{filename}"
-    send_data open(params[:url]).read, filename: filename
-    logger.info "Finish sending #{filename}"
+    song_tmp_file = download_song_locally(params[:url], filename)
+    logger.info "Start sending #{filename} to #{current_user.first_name} #{current_user.last_name}"
+    #send_data open(params[:url]).read, filename: filename
+    send_data song_tmp_file.read, filename: filename
+    logger.info "Finish sending #{filename} to #{current_user.first_name} #{current_user.last_name}"
   end
 
   private
 
   def create_zip(zipfile_path, files)
-    logger.info "Creating zip in #{zipfile_path}"
+    logger.info "Start creating zip in #{zipfile_path}"
 
     Zip::File.open(zipfile_path, Zip::File::CREATE) do |zipfile|
       files.each do |file|
         name = file[:mp3_filename]
         uri = URI(file[:url])
-        song_tmp_file = open(file[:url])
+        #song_tmp_file = open(file[:url])
+        song_tmp_file = download_song_locally(file[:url], name)
 
         zipfile.add(name, song_tmp_file)
       end
@@ -62,5 +65,12 @@ class SongsController < ApplicationController
 
   def mp3_filename(name)
     "#{name}.mp3"
+  end
+
+  def download_song_locally(url, filename = 'noname')
+    logger.info "Start downloading #{filename} from #{url}"
+    tmp_file = open(url)
+    logger.info "Finish downloading #{filename} from #{url}"
+    tmp_file
   end
 end
