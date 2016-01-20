@@ -11,6 +11,8 @@
 		<% @songs.each do |song| %>
 			<%= render partial: 'song', locals: {song: song} %>
 		<% end %>
-		<%= will_paginate @songs %>
+	</div>
+	<div id="page_links">
+		<%= will_paginate @songs, renderer: RemoteLinkPaginationHelper::LinkRenderer %>
 	</div>
 <% end %>

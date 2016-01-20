@@ -1,0 +1,8 @@
+var html = '';
+<% @songs.each do |song| %>
+	html += "<%= escape_javascript(render partial: 'song', locals: {song: song}) %>";
+<% end %>
+
+$('div#content').html(html);
+
+window.history.pushState(null, null, '/?page=<%= params[:page]%>');
